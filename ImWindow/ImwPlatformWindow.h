@@ -41,6 +41,7 @@ namespace ImWindow
 		virtual void						SetWindowMaximized(bool bMaximized);
 		virtual void						SetWindowMinimized(bool bMinimized);
 		virtual void						SetTitle(const char* pTtile);
+		virtual std::string					GetTitle();
 		bool								IsShowContent() const;
 		void								SetShowContent(bool bShow);
 
@@ -62,6 +63,7 @@ namespace ImWindow
 		virtual void						PreRender();
 		virtual void						OnOverlay();
 		virtual void						RenderDrawLists(ImDrawData* pDrawData);
+		virtual void                        UpdateTime() { /* imgui will assume 60 fps if not implemented in child class */ }
 
 		void								PreDestroy();
 		void								OnFocus(bool bFocused);

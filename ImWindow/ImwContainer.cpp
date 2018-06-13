@@ -1213,6 +1213,9 @@ namespace ImWindow
 
 	bool ImwContainer::HasUnclosableWindow() const
 	{
+		if (ImwWindowManager::GetInstance()->GetMainPlatformWindow()->GetContainer() == this)
+			return false;
+	
 		for (ImwWindowList::const_iterator itWindow = m_lWindows.begin(); itWindow != m_lWindows.end(); ++itWindow)
 		{
 			if ( !(*itWindow)->IsClosable() )

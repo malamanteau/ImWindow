@@ -12,6 +12,13 @@
 
 namespace ImWindow
 {
+	class ImwMainMenu
+	{
+	public:
+		virtual void OnMenu() = 0;
+	};
+
+
 //SFF_BEGIN
 	class IMGUI_API ImwWindowManager
 	{
@@ -101,6 +108,9 @@ namespace ImWindow
 			ImVec2					m_oStatusBarWindowPadding;
 			ImVec2					m_oStatusBarFramePadding;
 		};
+
+		std::string                 m_mainTitle;
+
 	public:
 		ImwWindowManager();
 		virtual								~ImwWindowManager();
@@ -241,9 +251,14 @@ namespace ImWindow
 		bool								m_bHasWantCaptureKeyboard;
 		bool								m_bHasWantCaptureMouse;
 
+		ImwMainMenu *                       m_mainMenu = nullptr;
+
+
 		// Static
 	public:
 		static ImwWindowManager*			GetInstance();
+		void                                SetMainMenu(ImwMainMenu * menu) { m_mainMenu = menu; }
+
 	protected:
 		static ImwWindowManager*			s_pInstance;
 	};

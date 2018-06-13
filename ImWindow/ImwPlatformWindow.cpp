@@ -104,6 +104,11 @@ namespace ImWindow
 	{
 	}
 
+	std::string ImwPlatformWindow::GetTitle()
+	{
+		return std::string("");
+	}
+
 	bool ImwPlatformWindow::IsShowContent() const
 	{
 		return m_bShowContent;
@@ -185,6 +190,7 @@ namespace ImWindow
 			SetContext(false);
 			ImGui::GetIO().DisplaySize = GetSize();
 			PreRender();
+			UpdateTime();
 			ImGui::Render();
 			RenderDrawLists(ImGui::GetDrawData());
 			RestoreContext(false);

@@ -2,16 +2,22 @@
 #ifndef __IM_PLATFORM_WINDOW_GLFW_H__
 #define __IM_PLATFORM_WINDOW_GLFW_H__
 
-#include "ImwConfig.h"
-#include "ImwPlatformWindow.h"
+#include <mutex>
+
+#include "../ImWindow/ImwConfig.h"
+#include "../ImWindow/ImwPlatformWindow.h"
 
 #include "GLFW/glfw3.h"
+
+IMGUI_API ImTextureID ImGui_Impl_CreateImageRGBA8888(uint8_t const * pixels, int32_t width, int32_t height);
+IMGUI_API void        ImGui_Impl_DeleteImage(ImTextureID img);
 
 namespace ImWindow
 {
 	class ImwPlatformWindowGLFW : ImwPlatformWindow
 	{
 		friend class ImwWindowManagerGLFW;
+
 	public:
 											ImwPlatformWindowGLFW(EPlatformWindowType eType, bool bCreateState);
 		virtual								~ImwPlatformWindowGLFW();
@@ -33,6 +39,7 @@ namespace ImWindow
 	protected:
 		virtual void						PreUpdate();
 		virtual void						RenderDrawLists(ImDrawData* pDrawData);
+		virtual void                        UpdateTime();
 
 		static void							OnClose(GLFWwindow* pWindow);
 		static void							OnFocus(GLFWwindow* pWindow, int iFocus);
@@ -52,6 +59,8 @@ namespace ImWindow
 		GLFWcursor*							m_pCursorVResize;
 		int									m_iLastMods;
 		GLuint								m_iTextureID;
+
+		double                              m_Time = 0.0f;
 	};
 }
 

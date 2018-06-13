@@ -1,7 +1,91 @@
 
+//System Includes
+#include <chrono>
+#include <thread>
+#include <iostream>
+
+#include "../../HandyCpp/Handy.hpp"
+
 #include "ImwPlatformWindowGLFW.h"
 
+#ifdef USE_FREETYPE
+#include "../../imgui_club/imgui_freetype/imgui_freetype.h"
+#endif
+
 using namespace ImWindow;
+
+static GLFWwindow * offscreen_context = nullptr;
+
+#define GL_CLAMP_TO_EDGE 0x812F
+
+static std::mutex ImGui_Impl_Mutex;
+
+static Handy::ThreadPool * g_pool = nullptr;
+
+ImTextureID ImGui_Impl_CreateImageRGBA8888(uint8_t const * pixels, int32_t width, int32_t height)
+{
+	if (!g_pool)
+	{
+		if (!offscreen_context)
+			return 0;
+
+		g_pool = new Handy::ThreadPool(1);
+
+		g_pool->AddJob([] 
+		{
+			glfwMakeContextCurrent(offscreen_context);
+		});
+	}
+
+	std::lock_guard<std::mutex> lock(ImGui_Impl_Mutex);
+	
+	//std::this_thread::sleep_for(std::chrono::milliseconds(1000));
+	GLuint textureID = 0;
+
+	g_pool->AddJob([&textureID,width,height,pixels] 
+	{
+		glEnable(GL_TEXTURE_2D);
+		//glTexParameteri(GL_TEXTURE_2D, GL_GENERATE_MIPMAP, GL_TRUE);
+		glGenTextures(1, &textureID);
+		glBindTexture(GL_TEXTURE_2D, textureID);
+		glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
+		glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
+		glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_CLAMP_TO_EDGE);
+		glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_CLAMP_TO_EDGE);
+		glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA8, width, height, 0, GL_RGBA, GL_UNSIGNED_BYTE, pixels);
+
+		//PFNGLGENERATEMIPMAPPROC(GL_TEXTURE_2D);
+
+		if (!textureID)
+		{
+			bool hi = false;
+		}
+
+		glFinish();
+		glFlush();
+	});
+
+	g_pool->WaitAll();
+	//if (textureID == 0)
+	//	std::cerr << "Zero texture ID" << std::endl;
+
+	return (ImTextureID)textureID;
+}
+
+void ImGui_Impl_DeleteImage(ImTextureID img)
+{
+	std::lock_guard<std::mutex> lock(ImGui_Impl_Mutex);
+
+	g_pool->AddJob([img] 
+	{
+		GLuint id = (GLuint)((uintptr_t)img);
+
+		if (id)
+			glDeleteTextures(1, &id);
+	});
+
+	//g_pool->WaitAll();
+}
 
 ImwPlatformWindowGLFW::ImwPlatformWindowGLFW(EPlatformWindowType eType, bool bCreateState)
 	: ImwPlatformWindow(eType, bCreateState)
@@ -50,6 +134,12 @@ ImwPlatformWindowGLFW::~ImwPlatformWindowGLFW()
 
 bool ImwPlatformWindowGLFW::Init(ImwPlatformWindow* pMain)
 {
+	if (!offscreen_context)
+	{
+		glfwWindowHint(GLFW_VISIBLE, GLFW_FALSE);
+		offscreen_context = glfwCreateWindow(640, 480, "", NULL, offscreen_context);
+	}
+
 	ImwPlatformWindowGLFW* pMainGLFW = ((ImwPlatformWindowGLFW*)pMain);
 
 	GLFWwindow* pMainWindow = NULL;
@@ -69,7 +159,17 @@ bool ImwPlatformWindowGLFW::Init(ImwPlatformWindow* pMain)
 	}
 
 	glfwWindowHint(GLFW_VISIBLE, 0);
-	m_pWindow = glfwCreateWindow(800, 600, "ImwPlatformWindowGLFW", NULL, pMainWindow);
+
+	//#ifdef _WIN32
+	//	glfwWindowHint(GLFW_DOUBLEBUFFER, 0);
+	//#else
+		glfwWindowHint(GLFW_DOUBLEBUFFER, 1);
+	//#endif
+	//glfwWindowHint(GLFW_OPENGL_PROFILE, GLFW_OPENGL_COMPAT_PROFILE);
+	glfwWindowHint(GLFW_CONTEXT_VERSION_MAJOR, 3);
+	glfwWindowHint(GLFW_CONTEXT_VERSION_MINOR, 0);
+
+	m_pWindow = glfwCreateWindow(1024, 768, "Main Window GLFW", NULL, pMainWindow ? pMainWindow : offscreen_context);
 	glfwSetWindowUserPointer(m_pWindow, this);
 
 	glfwSetWindowCloseCallback(m_pWindow, &ImwPlatformWindowGLFW::OnClose);
@@ -85,6 +185,11 @@ bool ImwPlatformWindowGLFW::Init(ImwPlatformWindow* pMain)
 
 	glfwMakeContextCurrent(m_pWindow);
 
+	//if (glfwExtensionSupported("WGL_EXT_swap_control_tear") || glfwExtensionSupported("GLX_EXT_swap_control_tear"))
+	//	glfwSwapInterval(-1);
+	//else
+	//	glfwSwapInterval(1);
+
 	SetContext(false);
 	ImGuiIO& io = ImGui::GetIO();
 	
@@ -99,7 +204,15 @@ bool ImwPlatformWindowGLFW::Init(ImwPlatformWindow* pMain)
 		int32_t iWidth;
 		int32_t iHeight;
 		io.Fonts->AddFontDefault();
-		io.Fonts->GetTexDataAsAlpha8(&pPixels, &iWidth, &iHeight);
+
+		#ifdef USE_FREETYPE
+		unsigned int flags = 0;// ImGuiFreeType::LightHinting;
+		ImGuiFreeType::BuildFontAtlas( io.Fonts, flags );
+		#endif
+
+		//io.Fonts->GetTexDataAsAlpha8(&pPixels, &iWidth, &iHeight);
+
+		io.Fonts->GetTexDataAsRGBA32(&pPixels, &iWidth, &iHeight);
 
 		// Upload texture to graphics system
 		glEnable(GL_TEXTURE_2D);
@@ -108,7 +221,7 @@ bool ImwPlatformWindowGLFW::Init(ImwPlatformWindow* pMain)
 		glBindTexture(GL_TEXTURE_2D, m_iTextureID);
 		glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
 		glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
-		glTexImage2D(GL_TEXTURE_2D, 0, GL_ALPHA, iWidth, iHeight, 0, GL_ALPHA, GL_UNSIGNED_BYTE, pPixels);
+		glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA8, iWidth, iHeight, 0, GL_RGBA, GL_UNSIGNED_BYTE, pPixels);
 
 		// Store our identifier
 		io.Fonts->TexID = (void *)(intptr_t)m_iTextureID;
@@ -309,6 +422,16 @@ void ImwPlatformWindowGLFW::OnChar(GLFWwindow* pWindow, unsigned int iChar)
 {
 	ImwPlatformWindowGLFW* pPlatformWindow = (ImwPlatformWindowGLFW*)glfwGetWindowUserPointer(pWindow);
 	pPlatformWindow->m_pContext->IO.AddInputCharacter((ImwChar)iChar);
+}
+
+void ImwPlatformWindowGLFW::UpdateTime()
+{
+	auto & io = ImGui::GetIO();
+
+	double current_time = glfwGetTime(); // Setup time step
+
+	io.DeltaTime = m_Time > 0.0 ? (float)(current_time - m_Time) : (float)(1.0f / 60.0f);
+	m_Time = current_time;
 }
 
 void ImwPlatformWindowGLFW::RenderDrawLists(ImDrawData* pDrawData)

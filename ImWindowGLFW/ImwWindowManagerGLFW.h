@@ -2,9 +2,9 @@
 #ifndef __IM_WINDOW_MANAGER_GLFW_H__
 #define __IM_WINDOW_MANAGER_GLFW_H__
 
-#include "ImwConfig.h"
+#include "../ImWindow/ImwConfig.h"
 
-#include "ImwWindowManager.h"
+#include "../ImWindow/ImwWindowManager.h"
 
 namespace ImWindow
 {

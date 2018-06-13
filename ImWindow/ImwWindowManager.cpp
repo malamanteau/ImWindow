@@ -133,6 +133,8 @@ namespace ImWindow
 		}
 		else
 		{
+			ImwSafeDelete(m_mainMenu);
+
 			while (m_lMenus.begin() != m_lMenus.end())
 			{
 				ImwMenu* pMenu = m_lMenus.back();
@@ -810,6 +812,21 @@ namespace ImWindow
 			if (pWindow->IsShowContent() || oIO.MousePos.y <= 50.f  || oIO.MetricsActiveWindows > 2) // Autohide menu bar
 			{
 				ImGui::BeginMainMenuBar();
+				
+				if (m_mainMenu != nullptr)
+				{
+					m_mainMenu->OnMenu();
+					//ImGui::SameLine();
+				}
+
+				if (m_lMenus.size() > 0)
+				{
+					ImGui::PushStyleColor(ImGuiCol_Text, ImVec4(1, 1, 1, 1));
+					ImGui::Text("     ||");
+					ImGui::PopStyleColor();
+					ImGui::SameLine();
+				}
+
 				for ( ImwMenuList::iterator it = m_lMenus.begin(), itEnd = m_lMenus.end(); it != itEnd; ++it )
 				{
 					(*it)->OnMenu();
