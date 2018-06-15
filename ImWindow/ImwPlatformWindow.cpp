@@ -20,7 +20,7 @@ namespace ImWindow
 			ImGuiContext* pGlobalContext = ImGui::GetCurrentContext();
 			IM_ASSERT(pGlobalContext != NULL);
 
-			m_pContext = ImGui::CreateContext( pGlobalContext->IO.MemAllocFn, pGlobalContext->IO.MemFreeFn );
+			m_pContext = ImGui::CreateContext(Globals::SharedFontAtlas);// pGlobalContext->IO.MemAllocFn, pGlobalContext->IO.MemFreeFn );
 
 			ImGuiIO& oGlobalIO = pGlobalContext->IO;
 			ImGuiIO& oNewIO = m_pContext->IO;
@@ -143,7 +143,7 @@ namespace ImWindow
 		{
 			m_pContext->IO.Fonts = NULL;
 			SetContext(false);
-			ImGui::Shutdown();
+			//ImGui::Shutdown();
 			RestoreContext(false);
 			ImGui::DestroyContext(m_pContext);
 			m_pContext = NULL;
@@ -166,7 +166,7 @@ namespace ImWindow
 
 			if (NULL != m_pContext)
 			{
-				m_pContext->SetNextWindowPosCond = m_pContext->SetNextWindowSizeCond = m_pContext->SetNextWindowContentSizeCond = m_pContext->SetNextWindowCollapsedCond = m_pContext->SetNextWindowFocus = 0;
+				m_pContext->NextWindowData.PosCond = m_pContext->NextWindowData.SizeCond = m_pContext->NextWindowData.ContentSizeCond = m_pContext->NextWindowData.CollapsedCond = m_pContext->NextWindowData.FocusCond = 0;
 				m_pContext->ActiveId = 0;
 
 				for (int i = 0; i < 512; ++i)

@@ -54,4 +54,10 @@
 #include "../../imgui/imgui.h"
 #include "../../imgui/imgui_internal.h"
 
+struct Globals
+{
+	static ImFontAtlas * SharedFontAtlas;
+};
+
+
 #endif // __IM_CONFIG_H__

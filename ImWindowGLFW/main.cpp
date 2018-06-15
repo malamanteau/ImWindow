@@ -2,8 +2,17 @@
 #include "ImwWindowManagerGLFW.h"
 #include "../sample.h"
 
+#include "../../imgui/imgui_internal.h"
+
+ImFontAtlas * Globals::SharedFontAtlas = nullptr;
+
 int main()
 {
+	ImFontAtlas fa;
+
+	Globals::SharedFontAtlas = &fa;
+	auto * context = ImGui::CreateContext(Globals::SharedFontAtlas);
+
 	PreInitSample();
 
 	ImwWindowManagerGLFW oMgr;
@@ -15,7 +24,7 @@ int main()
 	while (oMgr.Run(false) && oMgr.Run(true))
 		; // Sleep(16);
 
-	ImGui::Shutdown();
+	ImGui::DestroyContext(context);
 
 	return 0;
 }

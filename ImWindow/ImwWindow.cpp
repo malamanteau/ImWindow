@@ -19,7 +19,7 @@ namespace ImWindow
 		, m_oLastPosition(0.f, 0.f)
 		, m_oLastSize(0.f, 0.f)
 	{
-		m_iId = s_iNextId++;
+		m_iId = ++s_iNextId;
 	
 		//Write Id to string
 		int iIndex = 0;

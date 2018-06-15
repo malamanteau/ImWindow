@@ -801,7 +801,7 @@ namespace ImWindow
 
 		ImGui::GetIO().DisplaySize = pWindow->GetSize();
 		ImGuiContext* pContext = ImGui::GetCurrentContext();
-		if (pContext->FrameCountEnded >= pContext->FrameCount || !pContext->Initialized)
+		if (pContext->FrameCountEnded == -1 || pContext->FrameCountEnded >= pContext->FrameCount || !pContext->Initialized)
 			ImGui::NewFrame();
 
 		float fTop = 0.f;

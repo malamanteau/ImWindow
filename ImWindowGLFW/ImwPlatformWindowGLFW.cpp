@@ -8,9 +8,7 @@
 
 #include "ImwPlatformWindowGLFW.h"
 
-#ifdef USE_FREETYPE
-#include "../../imgui_club/imgui_freetype/imgui_freetype.h"
-#endif
+#include "../../imgui/misc/freetype/imgui_freetype.h"
 
 using namespace ImWindow;
 
@@ -163,7 +161,7 @@ bool ImwPlatformWindowGLFW::Init(ImwPlatformWindow* pMain)
 	//#ifdef _WIN32
 	//	glfwWindowHint(GLFW_DOUBLEBUFFER, 0);
 	//#else
-		glfwWindowHint(GLFW_DOUBLEBUFFER, 1);
+		//glfwWindowHint(GLFW_DOUBLEBUFFER, 1);
 	//#endif
 	//glfwWindowHint(GLFW_OPENGL_PROFILE, GLFW_OPENGL_COMPAT_PROFILE);
 	glfwWindowHint(GLFW_CONTEXT_VERSION_MAJOR, 3);
@@ -203,12 +201,13 @@ bool ImwPlatformWindowGLFW::Init(ImwPlatformWindow* pMain)
 		uint8_t* pPixels;
 		int32_t iWidth;
 		int32_t iHeight;
-		io.Fonts->AddFontDefault();
+		auto * defFnt = io.Fonts->AddFontDefault();
+		//auto * prettyFnt = io.Fonts->AddFontFromFileTTF("../../../imgui/misc/fonts/Roboto-Regular.ttf", 16);
 
-		#ifdef USE_FREETYPE
-		unsigned int flags = 0;// ImGuiFreeType::LightHinting;
+		//#ifdef USE_FREETYPE
+		unsigned int flags = ImGuiFreeType::LightHinting;
 		ImGuiFreeType::BuildFontAtlas( io.Fonts, flags );
-		#endif
+		//#endif
 
 		//io.Fonts->GetTexDataAsAlpha8(&pPixels, &iWidth, &iHeight);
 
@@ -225,6 +224,9 @@ bool ImwPlatformWindowGLFW::Init(ImwPlatformWindow* pMain)
 
 		// Store our identifier
 		io.Fonts->TexID = (void *)(intptr_t)m_iTextureID;
+
+		ImGui::SetCurrentFont(defFnt);
+		//ImGui::SetCurrentFont(prettyFnt);
 	}
 	
 	io.KeyMap[ImGuiKey_Tab] = GLFW_KEY_TAB;
@@ -347,7 +349,7 @@ void ImwPlatformWindowGLFW::PreUpdate()
 		case ImGuiMouseCursor_TextInput:         // When hovering over InputText, etc.
 			glfwSetCursor(m_pWindow, m_pCursorIBeam);
 			break;
-		case ImGuiMouseCursor_Move:              // Unused
+		case ImGuiMouseCursor_ResizeAll:              // Unused
 			glfwSetCursor(m_pWindow, m_pCursorHand);
 			break;
 		case ImGuiMouseCursor_ResizeNS:          // Unused
