@@ -336,7 +336,7 @@ void ImwPlatformWindowGLFW::PreUpdate()
 	{
 		glfwSetInputMode(m_pWindow, GLFW_CURSOR, GLFW_CURSOR_HIDDEN);
 	}
-	else if (oIO.MousePos.x != -1.f && oIO.MousePos.y != -1.f)
+	else if (oIO.MousePos.x != -FLT_MAX && oIO.MousePos.y != -FLT_MAX)
 	{
 		glfwSetInputMode(m_pWindow, GLFW_CURSOR, GLFW_CURSOR_NORMAL);
 		switch (m_pContext->MouseCursor)

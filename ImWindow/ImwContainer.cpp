@@ -895,7 +895,7 @@ namespace ImWindow
 		//Drop shadows
 		if (oConfig.m_bShowTabShadows)
 		{
-			const ImVec2 uv = GImGui->FontTexUvWhitePixel;
+			const ImVec2 uv = ImGui::GetFontTexUvWhitePixel();
 			pDrawList->PrimReserve(3, 3);
 			pDrawList->PrimWriteIdx((ImDrawIdx)(pDrawList->_VtxCurrentIdx)); pDrawList->PrimWriteIdx((ImDrawIdx)(pDrawList->_VtxCurrentIdx + 1)); pDrawList->PrimWriteIdx((ImDrawIdx)(pDrawList->_VtxCurrentIdx + 2));
 			pDrawList->PrimWriteVtx(ImVec2(oRectMin.x - oConfig.m_fTabOverlap - oConfig.m_fTabShadowDropSize, oRectMax.y), uv, ImColor(0.f, 0.f, 0.f, 0.f));
@@ -931,18 +931,18 @@ namespace ImWindow
 
 		if (bFocused)
 		{
-			pDrawList->AddConvexPolyFilled(pDrawList->_Path.Data + 1, pDrawList->_Path.Size - 1, bFocused ? oSelectedTab : oNormalTab, true);
+			pDrawList->AddConvexPolyFilled(pDrawList->_Path.Data + 1, pDrawList->_Path.Size - 1, bFocused ? oSelectedTab : oNormalTab);
 			if (fEndLinePos > oRectMax.x)
 			{
 				pDrawList->PathLineTo(ImVec2(fEndLinePos, oRectMax.y));
 			}
 
 			if (oConfig.m_bShowTabBorder)
-				pDrawList->AddPolyline(pDrawList->_Path.Data, pDrawList->_Path.Size, oBorderColor, false, 1.5f, true);
+				pDrawList->AddPolyline(pDrawList->_Path.Data, pDrawList->_Path.Size, oBorderColor, false, 1.5f);
 		}
 		else
 		{
-			pDrawList->AddConvexPolyFilled(pDrawList->_Path.Data, pDrawList->_Path.Size, bFocused ? oSelectedTab : oNormalTab, true);
+			pDrawList->AddConvexPolyFilled(pDrawList->_Path.Data, pDrawList->_Path.Size, bFocused ? oSelectedTab : oNormalTab);
 		}
 
 		pDrawList->PathClear();

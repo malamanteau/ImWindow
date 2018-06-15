@@ -184,7 +184,7 @@ namespace ImWindow
 
 	void ImwPlatformWindow::Render()
 	{
-		if( m_bNeedRender )
+		if (m_bNeedRender)
 		{
 			m_bNeedRender = false;
 			SetContext(false);

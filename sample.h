@@ -2,7 +2,7 @@
 #include <stdlib.h>
 #include <crtdbg.h>
 
-#include "imgui.h"
+#include "../imgui/imgui.h"
 
 #ifdef _WIN32
 #define ImwNewline "\r\n"
@@ -130,7 +130,7 @@ public:
 			style.Colors[ImGuiCol_ScrollbarGrab] = ImVec4(0.40f, 0.40f, 0.80f, 0.30f);
 			style.Colors[ImGuiCol_ScrollbarGrabHovered] = ImVec4(0.40f, 0.40f, 0.80f, 0.40f);
 			style.Colors[ImGuiCol_ScrollbarGrabActive] = ImVec4(0.80f, 0.50f, 0.50f, 0.40f);
-			style.Colors[ImGuiCol_ComboBg] = ImVec4(0.20f, 0.20f, 0.20f, 0.99f);
+			//style.Colors[ImGuiCol_ComboBg] = ImVec4(0.20f, 0.20f, 0.20f, 0.99f); // Now uses PopupBg
 			style.Colors[ImGuiCol_CheckMark] = ImVec4(0.90f, 0.90f, 0.90f, 0.50f);
 			style.Colors[ImGuiCol_SliderGrab] = ImVec4(1.00f, 1.00f, 1.00f, 0.30f);
 			style.Colors[ImGuiCol_SliderGrabActive] = ImVec4(0.80f, 0.50f, 0.50f, 1.00f);
@@ -183,7 +183,7 @@ public:
 			style.Colors[ImGuiCol_ScrollbarGrab] = ImVec4(0.31f, 0.31f, 0.31f, 1.00f);
 			style.Colors[ImGuiCol_ScrollbarGrabHovered] = ImVec4(0.41f, 0.41f, 0.41f, 1.00f);
 			style.Colors[ImGuiCol_ScrollbarGrabActive] = ImVec4(0.51f, 0.51f, 0.51f, 1.00f);
-			style.Colors[ImGuiCol_ComboBg] = ImVec4(0.14f, 0.14f, 0.14f, 0.99f);
+			//style.Colors[ImGuiCol_ComboBg] = ImVec4(0.14f, 0.14f, 0.14f, 0.99f); // Now uses PopupBg
 			style.Colors[ImGuiCol_CheckMark] = ImVec4(0.26f, 0.59f, 0.98f, 1.00f);
 			style.Colors[ImGuiCol_SliderGrab] = ImVec4(0.24f, 0.52f, 0.88f, 1.00f);
 			style.Colors[ImGuiCol_SliderGrabActive] = ImVec4(0.26f, 0.59f, 0.98f, 1.00f);
@@ -236,7 +236,7 @@ public:
 			style.Colors[ImGuiCol_ScrollbarGrab] = ImVec4(0.55f, 0.53f, 0.55f, 0.51f);
 			style.Colors[ImGuiCol_ScrollbarGrabHovered] = ImVec4(0.56f, 0.56f, 0.56f, 1.00f);
 			style.Colors[ImGuiCol_ScrollbarGrabActive] = ImVec4(0.56f, 0.56f, 0.56f, 0.91f);
-			style.Colors[ImGuiCol_ComboBg] = ImVec4(0.10f, 0.10f, 0.10f, 0.99f);
+			//style.Colors[ImGuiCol_ComboBg] = ImVec4(0.10f, 0.10f, 0.10f, 0.99f); // Now uses PopupBg
 			style.Colors[ImGuiCol_CheckMark] = ImVec4(0.90f, 0.90f, 0.90f, 0.83f);
 			style.Colors[ImGuiCol_SliderGrab] = ImVec4(0.70f, 0.70f, 0.70f, 0.62f);
 			style.Colors[ImGuiCol_SliderGrabActive] = ImVec4(0.30f, 0.30f, 0.30f, 0.84f);
@@ -285,7 +285,7 @@ public:
 			style.Colors[ImGuiCol_ScrollbarGrab] = ImVec4(0.16f, 0.50f, 0.73f, 0.21f);
 			style.Colors[ImGuiCol_ScrollbarGrabHovered] = ImVec4(0.16f, 0.50f, 0.73f, 0.78f);
 			style.Colors[ImGuiCol_ScrollbarGrabActive] = ImVec4(0.16f, 0.50f, 0.73f, 1.00f);
-			style.Colors[ImGuiCol_ComboBg] = ImVec4(0.22f, 0.31f, 0.41f, 1.00f);
+			//style.Colors[ImGuiCol_ComboBg] = ImVec4(0.22f, 0.31f, 0.41f, 1.00f); // Now uses PopupBg
 			style.Colors[ImGuiCol_CheckMark] = ImVec4(0.16f, 0.50f, 0.73f, 0.80f);
 			style.Colors[ImGuiCol_SliderGrab] = ImVec4(0.16f, 0.50f, 0.73f, 0.50f);
 			style.Colors[ImGuiCol_SliderGrabActive] = ImVec4(0.16f, 0.50f, 0.73f, 1.00f);
@@ -335,7 +335,7 @@ public:
 			style.Colors[ImGuiCol_ScrollbarGrab] = ImVec4(0.39f, 0.64f, 0.80f, 0.30f);
 			style.Colors[ImGuiCol_ScrollbarGrabHovered] = ImVec4(0.28f, 0.67f, 0.80f, 0.59f);
 			style.Colors[ImGuiCol_ScrollbarGrabActive] = ImVec4(0.25f, 0.48f, 0.53f, 0.67f);
-			style.Colors[ImGuiCol_ComboBg] = ImVec4(0.89f, 0.98f, 1.00f, 0.99f);
+			//style.Colors[ImGuiCol_ComboBg] = ImVec4(0.89f, 0.98f, 1.00f, 0.99f); // Now uses PopupBg
 			style.Colors[ImGuiCol_CheckMark] = ImVec4(0.48f, 0.47f, 0.47f, 0.71f);
 			style.Colors[ImGuiCol_SliderGrab] = ImVec4(1.00f, 1.00f, 1.00f, 0.30f);
 			style.Colors[ImGuiCol_SliderGrabActive] = ImVec4(0.31f, 0.47f, 0.99f, 1.00f);
@@ -377,7 +377,7 @@ public:
 		if (ImGui::TreeNode("Rendering"))
 		{
 			ImGui::Checkbox("Anti-aliased lines", &style.AntiAliasedLines);
-			ImGui::Checkbox("Anti-aliased shapes", &style.AntiAliasedShapes);
+			ImGui::Checkbox("Anti-aliased fills", &style.AntiAliasedFill);
 			ImGui::PushItemWidth(100);
 			ImGui::DragFloat("Curve Tessellation Tolerance", &style.CurveTessellationTol, 0.02f, 0.10f, FLT_MAX, NULL, 2.0f);
 			if (style.CurveTessellationTol < 0.0f) style.CurveTessellationTol = 0.10f;
@@ -390,7 +390,7 @@ public:
 			ImGui::SliderFloat("Alpha", &style.Alpha, 0.20f, 1.0f, "%.2f");                 // Not exposing zero here so user doesn't "lose" the UI. But application code could have a toggle to switch between zero and non-zero.
 			ImGui::SliderFloat2("WindowPadding", (float*)&style.WindowPadding, 0.0f, 20.0f, "%.0f");
 			ImGui::SliderFloat("WindowRounding", &style.WindowRounding, 0.0f, 16.0f, "%.0f");
-			ImGui::SliderFloat("ChildWindowRounding", &style.ChildWindowRounding, 0.0f, 16.0f, "%.0f");
+			ImGui::SliderFloat("ChildRounding", &style.ChildRounding, 0.0f, 16.0f, "%.0f");
 			ImGui::SliderFloat2("FramePadding", (float*)&style.FramePadding, 0.0f, 20.0f, "%.0f");
 			ImGui::SliderFloat("FrameRounding", &style.FrameRounding, 0.0f, 16.0f, "%.0f");
 			ImGui::SliderFloat2("ItemSpacing", (float*)&style.ItemSpacing, 0.0f, 20.0f, "%.0f");
@@ -410,7 +410,7 @@ public:
 			static bool output_only_modified = false;
 			if (ImGui::Button("Output Colors"))
 			{
-				if (output_dest == 0)
+				if (output_dest == 0) 
 					ImGui::LogToClipboard();
 				else
 					ImGui::LogToTTY();
@@ -418,7 +418,7 @@ public:
 				for (int i = 0; i < ImGuiCol_COUNT; i++)
 				{
 					const ImVec4& col = style.Colors[i];
-					const char* name = ImGui::GetStyleColName(i);
+					const char* name = ImGui::GetStyleColorName(i);
 					if (!output_only_modified || memcmp(&col, (ref ? &ref->Colors[i] : &def.Colors[i]), sizeof(ImVec4)) != 0)
 						ImGui::LogText("style.Colors[ImGuiCol_%s]%*s= ImVec4(%.2ff, %.2ff, %.2ff, %.2ff);" ImwNewline, name, 22 - (int)strlen(name), "", col.x, col.y, col.z, col.w);
 				}
@@ -427,12 +427,12 @@ public:
 			ImGui::SameLine(); ImGui::PushItemWidth(120); ImGui::Combo("##output_type", &output_dest, "To Clipboard\0To TTY"); ImGui::PopItemWidth();
 			ImGui::SameLine(); ImGui::Checkbox("Only Modified Fields", &output_only_modified);
 
-			static ImGuiColorEditMode edit_mode = ImGuiColorEditMode_RGB;
-			ImGui::RadioButton("RGB", &edit_mode, ImGuiColorEditMode_RGB);
+			static ImGuiColorEditFlags edit_mode = ImGuiColorEditFlags_RGB;
+			ImGui::RadioButton("RGB", &edit_mode, ImGuiColorEditFlags_RGB);
 			ImGui::SameLine();
-			ImGui::RadioButton("HSV", &edit_mode, ImGuiColorEditMode_HSV);
+			ImGui::RadioButton("HSV", &edit_mode, ImGuiColorEditFlags_HSV);
 			ImGui::SameLine();
-			ImGui::RadioButton("HEX", &edit_mode, ImGuiColorEditMode_HEX);
+			ImGui::RadioButton("HEX", &edit_mode, ImGuiColorEditFlags_HEX);
 			//ImGui::Text("Tip: Click on colored square to change edit mode.");
 
 			static ImGuiTextFilter filter;
@@ -440,14 +440,14 @@ public:
 
 			ImGui::PushID("#colors");
 			ImGui::PushItemWidth(-160);
-			ImGui::ColorEditMode(edit_mode);
+			//ImGui::ColorEditMode(edit_mode);
 			for (int i = 0; i < ImGuiCol_COUNT; i++)
 			{
-				const char* name = ImGui::GetStyleColName(i);
+				const char* name = ImGui::GetStyleColorName(i);
 				if (!filter.PassFilter(name))
 					continue;
 				ImGui::PushID(i);
-				ImGui::ColorEdit4(name, (float*)&style.Colors[i], true);
+				ImGui::ColorEdit4(name, (float*)&style.Colors[i], edit_mode);
 				if (memcmp(&style.Colors[i], (ref ? &ref->Colors[i] : &def.Colors[i]), sizeof(ImVec4)) != 0)
 				{
 					ImGui::SameLine(); if (ImGui::Button("Revert")) style.Colors[i] = ref ? ref->Colors[i] : def.Colors[i];
@@ -548,7 +548,7 @@ public:
 		ImGui::Checkbox("Show grid", &show_grid);
 		ImGui::PushStyleVar(ImGuiStyleVar_FramePadding, ImVec2(1, 1));
 		ImGui::PushStyleVar(ImGuiStyleVar_WindowPadding, ImVec2(0, 0));
-		ImGui::PushStyleColor(ImGuiCol_ChildWindowBg, ImColor(60, 60, 70, 200));
+		ImGui::PushStyleColor(ImGuiCol_ChildWindowBg, (ImVec4)ImColor(60, 60, 70, 200));
 		ImGui::BeginChild("scrolling_region", ImVec2(0, 0), true, ImGuiWindowFlags_NoScrollbar | ImGuiWindowFlags_NoMove);
 		ImGui::PushItemWidth(120.0f);
 
