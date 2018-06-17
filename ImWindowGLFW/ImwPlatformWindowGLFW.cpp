@@ -178,6 +178,7 @@ bool ImwPlatformWindowGLFW::Init(ImwPlatformWindow* pMain)
 	glfwSetScrollCallback(m_pWindow, &ImwPlatformWindowGLFW::OnMouseWheel);
 	glfwSetKeyCallback(m_pWindow, &ImwPlatformWindowGLFW::OnKey);
 	glfwSetCharCallback(m_pWindow, &ImwPlatformWindowGLFW::OnChar);
+	glfwSetCursorEnterCallback(m_pWindow, &ImwPlatformWindowGLFW::OnEnter);
 	
 	//TODO alpha on dragging preview window
 
@@ -400,6 +401,7 @@ void ImwPlatformWindowGLFW::OnMouseButton(GLFWwindow* pWindow, int iButton, int 
 void ImwPlatformWindowGLFW::OnMouseMove(GLFWwindow* pWindow, double fPosX, double fPosY)
 {
 	ImwPlatformWindowGLFW* pPlatformWindow = (ImwPlatformWindowGLFW*)glfwGetWindowUserPointer(pWindow);
+
 	pPlatformWindow->m_pContext->IO.MousePos = ImVec2((float)fPosX, (float)fPosY);
 }
 
@@ -425,6 +427,21 @@ void ImwPlatformWindowGLFW::OnChar(GLFWwindow* pWindow, unsigned int iChar)
 	ImwPlatformWindowGLFW* pPlatformWindow = (ImwPlatformWindowGLFW*)glfwGetWindowUserPointer(pWindow);
 	pPlatformWindow->m_pContext->IO.AddInputCharacter((ImwChar)iChar);
 }
+
+void ImwPlatformWindowGLFW::OnEnter(GLFWwindow* pWindow, int entered)
+{
+	ImwPlatformWindowGLFW* pPlatformWindow = (ImwPlatformWindowGLFW*)glfwGetWindowUserPointer(pWindow);
+
+	if (entered != 0) // if entered
+	{
+
+	}
+	else
+	{
+		pPlatformWindow->m_pContext->IO.MousePos = ImVec2(-1_f, -1_f);
+	}
+}
+
 
 void ImwPlatformWindowGLFW::UpdateTime()
 {

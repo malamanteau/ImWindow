@@ -49,6 +49,7 @@ namespace ImWindow
 		static void							OnMouseWheel(GLFWwindow* pWindow, double fOffsetX, double fOffsetY);
 		static void							OnKey(GLFWwindow* pWindow, int iKey, int iScanCode, int iAction, int iMods);
 		static void							OnChar(GLFWwindow* pWindow, unsigned int iCodepoint);
+		static void                         OnEnter(GLFWwindow* pWindow, int entered);
 
 		GLFWwindow*							m_pWindow;
 		GLFWcursor*							m_pCursorArrow;
