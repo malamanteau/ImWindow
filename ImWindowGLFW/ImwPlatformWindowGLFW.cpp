@@ -3,12 +3,19 @@
 #include <chrono>
 #include <thread>
 #include <iostream>
+#include <fstream>
 
 #include "../../HandyCpp/Handy.hpp"
 
 #include "ImwPlatformWindowGLFW.h"
 
 #include "../../imgui/misc/freetype/imgui_freetype.h"
+
+#ifdef LOADGLFWICON
+	#include "../../GEMS/stb_image.h"
+	#include "../../GEMS/ExecutablePath.hpp"
+#endif
+
 
 using namespace ImWindow;
 
@@ -168,6 +175,53 @@ bool ImwPlatformWindowGLFW::Init(ImwPlatformWindow* pMain)
 	glfwWindowHint(GLFW_CONTEXT_VERSION_MINOR, 0);
 
 	m_pWindow = glfwCreateWindow(1024, 768, "Main Window GLFW", NULL, pMainWindow ? pMainWindow : offscreen_context);
+	
+	#ifdef LOADGLFWICON
+	{
+		int width = 0, height = 0, bpp = 0;
+		unsigned char * rgba = nullptr;
+
+		try
+		{
+			std::filesystem::path thispath(GetExecutablePath());
+			
+			std::ifstream myImg;
+
+			std::string asStr = (thispath.parent_path() / "Internal" / "glfwicon.png").string();
+
+			myImg.open((thispath.parent_path() / "Internal" / "glfwicon.png").c_str(), std::ios::in | std::ios::binary);
+
+			if (myImg.good())
+			{
+				myImg.seekg(0, std::ios::end);
+				std::streampos length(myImg.tellg());
+				std::vector<char> vec;
+				if (length)
+				{
+					myImg.seekg(0, std::ios::beg);
+					vec.resize(static_cast<std::size_t>(length));
+					myImg.read(&vec.front(), static_cast<std::size_t>(length));
+				}
+
+				if ((rgba = stbi_load_from_memory((const stbi_uc *)&vec[0], (int)length, &width, &height, &bpp, 4)))
+				{
+					GLFWimage glfwImg = { width, height, rgba };
+					glfwSetWindowIcon(m_pWindow, 1, &glfwImg);
+				}
+			}
+
+			myImg.close();
+		}
+		catch (...)
+		{
+			std::cerr << "Could not decode icon image from file: " << "internal/glfwicon.ico" << std::endl;
+		}
+
+		if (rgba)
+			stbi_image_free(rgba);
+	}
+	#endif
+
 	glfwSetWindowUserPointer(m_pWindow, this);
 
 	glfwSetWindowCloseCallback(m_pWindow, &ImwPlatformWindowGLFW::OnClose);
