@@ -845,7 +845,8 @@ namespace ImWindow
 		float fTabWidth = GetTabWidth(pText, fMaxSize, &oTextSize);
 
 		//Calculate tab size
-		ImVec2 oTabSize(fTabWidth, c_fTabHeight);
+		//ImVec2 oTabSize(fTabWidth, c_fTabHeight);
+		ImVec2 oTabSize(fTabWidth, oTextSize.y + 7.0f);
 		if (pSizeOut != NULL)
 		{
 			*pSizeOut = oTabSize;
