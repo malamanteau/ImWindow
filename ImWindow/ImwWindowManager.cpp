@@ -819,18 +819,18 @@ namespace ImWindow
 					//ImGui::SameLine();
 				}
 
-				if (m_lMenus.size() > 0)
-				{
-					ImGui::PushStyleColor(ImGuiCol_Text, ImVec4(1, 1, 1, 1));
-					ImGui::Text("     ||");
-					ImGui::PopStyleColor();
-					ImGui::SameLine();
-				}
+				//if (m_lMenus.size() > 0)
+				//{
+				//	ImGui::PushStyleColor(ImGuiCol_Text, ImVec4(1, 1, 1, 1));
+				//	ImGui::Text("     ||");
+				//	ImGui::PopStyleColor();
+				//	ImGui::SameLine();
+				//}
 
-				for ( ImwMenuList::iterator it = m_lMenus.begin(), itEnd = m_lMenus.end(); it != itEnd; ++it )
-				{
-					(*it)->OnMenu();
-				}
+				//for ( ImwMenuList::iterator it = m_lMenus.begin(), itEnd = m_lMenus.end(); it != itEnd; ++it )
+				//{
+				//	(*it)->OnMenu();
+				//}
 				fTop = ImGui::GetWindowHeight();
 				ImGui::EndMainMenuBar();
 				if (m_lStatusBars.size() > 0)

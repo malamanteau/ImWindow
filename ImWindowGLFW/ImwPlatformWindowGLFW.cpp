@@ -6,14 +6,14 @@
 #include <fstream>
 
 #include "../../HandyCpp/Handy.hpp"
+#include "../../HandyCpp/HandyExtended.hpp"
 
 #include "ImwPlatformWindowGLFW.h"
 
 #include "../../imgui/misc/freetype/imgui_freetype.h"
 
 #ifdef LOADGLFWICON
-	#include "../../GEMS/stb_image.h"
-	#include "../../GEMS/ExecutablePath.hpp"
+	#include "../../HandyCpp/Extended/stb_image.h"
 #endif
 
 
@@ -183,7 +183,7 @@ bool ImwPlatformWindowGLFW::Init(ImwPlatformWindow* pMain)
 
 		try
 		{
-			std::filesystem::path thispath(GetExecutablePath());
+			std::filesystem::path thispath(Handy::Platform::Paths::ThisExecutableFile());
 			
 			std::ifstream myImg;
 

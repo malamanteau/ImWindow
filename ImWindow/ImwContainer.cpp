@@ -529,41 +529,51 @@ namespace ImWindow
 				ImGui::InvisibleButton("TabListButton", ImVec2(16, 16));
 				ImGui::SameLine();
 
-				if (ImGui::BeginPopupContextItem("TabListMenu", 0))
+				if (m_lWindows.size() > 1)
 				{
-					int iIndex = 0;
-					for (ImwWindowList::const_iterator itWindow = m_lWindows.begin(); itWindow != m_lWindows.end(); ++itWindow, ++iIndex)
+
+					if (ImGui::BeginPopupContextItem("TabListMenu", 0))
 					{
-						if (ImGui::Selectable((*itWindow)->GetTitle()))
+						int iIndex = 0;
+						for (ImwWindowList::const_iterator itWindow = m_lWindows.begin(); itWindow != m_lWindows.end(); ++itWindow, ++iIndex)
 						{
-							m_iActiveWindow = iIndex;
+							bool isActive = m_iActiveWindow == iIndex;
+							ImGui::PushID(iIndex);
+							if (ImGui::RadioButton((*itWindow)->GetTitle(), isActive))
+							{
+								m_iActiveWindow = iIndex;
+								ImGui::CloseCurrentPopup();
+							}
+							ImGui::PopID();
 						}
+						ImGui::EndPopup();
 					}
-					ImGui::EndPopup();
+
+					ImColor oLinesColor = ImColor(160, 160, 160, 255);
+					if (ImGui::IsItemHovered())
+					{
+						oLinesColor = ImColor(255, 255, 255, 255);
+					}
+					ImVec2 oButtonMin = ImGui::GetItemRectMin();
+					ImVec2 oButtonMax = ImGui::GetItemRectMax();
+					ImVec2 oButtonSize = ImVec2(oButtonMax.x - oButtonMin.x, oButtonMax.y - oButtonMin.y);
+					pDrawList->AddLine(
+						ImVec2(oButtonMin.x + 2, oButtonMin.y + oButtonSize.y / 2),
+						ImVec2(oButtonMax.x - 5, oButtonMin.y + oButtonSize.y / 2),
+						oLinesColor);
+
+					pDrawList->AddLine(
+						ImVec2(oButtonMin.x + 2, oButtonMin.y + oButtonSize.y / 2 - 4),
+						ImVec2(oButtonMax.x - 2, oButtonMin.y + oButtonSize.y / 2 - 4),
+						oLinesColor);
+
+					pDrawList->AddLine(
+						ImVec2(oButtonMin.x + 2, oButtonMin.y + oButtonSize.y / 2 + 4),
+						ImVec2(oButtonMax.x - 8, oButtonMin.y + oButtonSize.y / 2 + 4),
+						oLinesColor);
 				}
 
-				ImColor oLinesColor = ImColor(160, 160, 160, 255);
-				if (ImGui::IsItemHovered())
-				{
-					oLinesColor = ImColor(255, 255, 255, 255);
-				}
-				ImVec2 oButtonMin = ImGui::GetItemRectMin();
-				ImVec2 oButtonMax = ImGui::GetItemRectMax();
-				ImVec2 oButtonSize = ImVec2(oButtonMax.x - oButtonMin.x, oButtonMax.y - oButtonMin.y);
-				pDrawList->AddLine(
-					ImVec2(oButtonMin.x + 1, oButtonMin.y + oButtonSize.y / 2),
-					ImVec2(oButtonMax.x - 1, oButtonMin.y + oButtonSize.y / 2),
-					oLinesColor);
 
-				pDrawList->AddLine(
-					ImVec2(oButtonMin.x + 1, oButtonMin.y + oButtonSize.y / 2 - 4),
-					ImVec2(oButtonMax.x - 1, oButtonMin.y + oButtonSize.y / 2 - 4),
-					oLinesColor);
-
-				pDrawList->AddLine(
-					ImVec2(oButtonMin.x + 1, oButtonMin.y + oButtonSize.y / 2 + 4),
-					ImVec2(oButtonMax.x - 1, oButtonMin.y + oButtonSize.y / 2 + 4),
-					oLinesColor);
 
 				pDrawList->ChannelsSplit(2);
 
