@@ -260,7 +260,7 @@ bool ImwPlatformWindowGLFW::Init(ImwPlatformWindow* pMain)
 		//auto * prettyFnt = io.Fonts->AddFontFromFileTTF("../../../imgui/misc/fonts/Roboto-Regular.ttf", 16);
 
 		//#ifdef USE_FREETYPE
-		unsigned int flags = ImGuiFreeType::LightHinting;
+		unsigned int flags = 0;// ImGuiFreeType::LightHinting;
 		ImGuiFreeType::BuildFontAtlas( io.Fonts, flags );
 		//#endif
 
