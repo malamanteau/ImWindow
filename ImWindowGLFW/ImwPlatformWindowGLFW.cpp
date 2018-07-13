@@ -241,7 +241,7 @@ bool ImwPlatformWindowGLFW::Init(ImwPlatformWindow* pMain)
 	//if (glfwExtensionSupported("WGL_EXT_swap_control_tear") || glfwExtensionSupported("GLX_EXT_swap_control_tear"))
 	//	glfwSwapInterval(-1);
 	//else
-	//	glfwSwapInterval(1);
+		glfwSwapInterval(1);
 
 	SetContext(false);
 	ImGuiIO& io = ImGui::GetIO();
@@ -260,7 +260,7 @@ bool ImwPlatformWindowGLFW::Init(ImwPlatformWindow* pMain)
 		//auto * prettyFnt = io.Fonts->AddFontFromFileTTF("../../../imgui/misc/fonts/Roboto-Regular.ttf", 16);
 
 		//#ifdef USE_FREETYPE
-		unsigned int flags = 0;// ImGuiFreeType::LightHinting;
+		unsigned int flags = ImGuiFreeType::ForceAutoHint;
 		ImGuiFreeType::BuildFontAtlas( io.Fonts, flags );
 		//#endif
 
