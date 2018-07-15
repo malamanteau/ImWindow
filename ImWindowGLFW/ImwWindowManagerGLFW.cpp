@@ -9,9 +9,17 @@
 
 using namespace ImWindow;
 
+static void error_callback(int error, const char* description)
+{
+	fprintf(stderr, "Error: %s\n", description);
+}
+
 ImwWindowManagerGLFW::ImwWindowManagerGLFW()
 {
+	glfwSetErrorCallback(error_callback);
+	fprintf(stderr, "Calling glfwInit()...\r\n"); fflush(stderr);
 	glfwInit();
+	fprintf(stderr, "glfwInit() returned.\r\n"); fflush(stderr);
 }
 
 ImwWindowManagerGLFW::~ImwWindowManagerGLFW()

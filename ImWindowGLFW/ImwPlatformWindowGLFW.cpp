@@ -139,10 +139,20 @@ ImwPlatformWindowGLFW::~ImwPlatformWindowGLFW()
 
 bool ImwPlatformWindowGLFW::Init(ImwPlatformWindow* pMain)
 {
+	glfwWindowHint(GLFW_CONTEXT_VERSION_MAJOR, 2);
+	glfwWindowHint(GLFW_CONTEXT_VERSION_MINOR, 1);
+
 	if (!offscreen_context)
 	{
 		glfwWindowHint(GLFW_VISIBLE, GLFW_FALSE);
+		fprintf(stderr, "Calling glfwCreateWindow() to create offscreen context...\r\n"); fflush(stderr);
 		offscreen_context = glfwCreateWindow(640, 480, "", NULL, offscreen_context);
+		fprintf(stderr, "glfwCreateWindow() returned\r\n"); fflush(stderr);
+	}
+
+	if (!offscreen_context)
+	{
+		fprintf(stderr, "Failed to create offscreen_context.\r\n"); fflush(stderr);
 	}
 
 	ImwPlatformWindowGLFW* pMainGLFW = ((ImwPlatformWindowGLFW*)pMain);
@@ -171,10 +181,15 @@ bool ImwPlatformWindowGLFW::Init(ImwPlatformWindow* pMain)
 		//glfwWindowHint(GLFW_DOUBLEBUFFER, 1);
 	//#endif
 	//glfwWindowHint(GLFW_OPENGL_PROFILE, GLFW_OPENGL_COMPAT_PROFILE);
-	glfwWindowHint(GLFW_CONTEXT_VERSION_MAJOR, 3);
-	glfwWindowHint(GLFW_CONTEXT_VERSION_MINOR, 0);
 
+
+	fprintf(stderr, "Calling glfwCreateWindow() to create main platform window...\r\n"); fflush(stderr);
 	m_pWindow = glfwCreateWindow(1024, 768, "Main Window GLFW", NULL, pMainWindow ? pMainWindow : offscreen_context);
+	
+	if (!m_pWindow)
+	{
+		fprintf(stderr, "Failed to create window.\r\n"); fflush(stderr);
+	}
 	
 	#ifdef LOADGLFWICON
 	{
@@ -183,13 +198,14 @@ bool ImwPlatformWindowGLFW::Init(ImwPlatformWindow* pMain)
 
 		try
 		{
-			std::filesystem::path thispath(Handy::Platform::Paths::ThisExecutableFile());
+			std::filesystem::path thispath = Handy::Platform::Paths::ThisExecutableFile();
 			
 			std::ifstream myImg;
 
 			std::string asStr = (thispath.parent_path() / "Internal" / "glfwicon.png").string();
 
-			myImg.open((thispath.parent_path() / "Internal" / "glfwicon.png").c_str(), std::ios::in | std::ios::binary);
+			auto imgpath = (thispath.parent_path() / "Internal" / "glfwicon.png");
+			myImg.open(imgpath.string(), std::ios::in | std::ios::binary);
 
 			if (myImg.good())
 			{
@@ -201,12 +217,20 @@ bool ImwPlatformWindowGLFW::Init(ImwPlatformWindow* pMain)
 					myImg.seekg(0, std::ios::beg);
 					vec.resize(static_cast<std::size_t>(length));
 					myImg.read(&vec.front(), static_cast<std::size_t>(length));
-				}
 
 				if ((rgba = stbi_load_from_memory((const stbi_uc *)&vec[0], (int)length, &width, &height, &bpp, 4)))
 				{
 					GLFWimage glfwImg = { width, height, rgba };
 					glfwSetWindowIcon(m_pWindow, 1, &glfwImg);
+				}
+					else
+					{
+						fprintf(stderr, "stbi_load_from_memory() returned null.\r\n"); fflush(stderr);
+					}
+				}
+				else
+				{
+					fprintf(stderr, "Icon file handle good, but zero length file.\r\n"); fflush(stderr);
 				}
 			}
 
@@ -260,7 +284,7 @@ bool ImwPlatformWindowGLFW::Init(ImwPlatformWindow* pMain)
 		//auto * prettyFnt = io.Fonts->AddFontFromFileTTF("../../../imgui/misc/fonts/Roboto-Regular.ttf", 16);
 
 		//#ifdef USE_FREETYPE
-		unsigned int flags = ImGuiFreeType::ForceAutoHint;
+		unsigned int flags = ImGuiFreeType::ForceAutoHint; //ImGuiFreeType::LightHinting;
 		ImGuiFreeType::BuildFontAtlas( io.Fonts, flags );
 		//#endif
 
