@@ -292,14 +292,17 @@ bool ImwPlatformWindowGLFW::Init(ImwPlatformWindow* pMain)
 
 		io.Fonts->GetTexDataAsRGBA32(&pPixels, &iWidth, &iHeight);
 
-		// Upload texture to graphics system
-		glEnable(GL_TEXTURE_2D);
-		m_iTextureID = 0;
-		glGenTextures(1, &m_iTextureID);
-		glBindTexture(GL_TEXTURE_2D, m_iTextureID);
-		glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
-		glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
-		glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA8, iWidth, iHeight, 0, GL_RGBA, GL_UNSIGNED_BYTE, pPixels);
+		m_iTextureID = ImGui_Impl_CreateImageRGBA8888(pPixels, iWidth, iHeight);
+
+		//// Upload texture to graphics system
+		//glEnable(GL_TEXTURE_2D);
+		//m_iTextureID = 0;
+		//glGenTextures(1, &m_iTextureID);
+		//glBindTexture(GL_TEXTURE_2D, m_iTextureID);
+		//glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
+		//glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
+		//glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA8, iWidth, iHeight, 0, GL_RGBA, GL_UNSIGNED_BYTE, pPixels);
+
 
 		// Store our identifier
 		io.Fonts->TexID = (void *)(intptr_t)m_iTextureID;
