@@ -59,7 +59,7 @@ namespace ImWindow
 		GLFWcursor*							m_pCursorHResize;
 		GLFWcursor*							m_pCursorVResize;
 		int									m_iLastMods;
-		GLuint								m_iTextureID;
+		ImTextureID							m_iTextureID;
 
 		double                              m_Time = 0.0f;
 	};
