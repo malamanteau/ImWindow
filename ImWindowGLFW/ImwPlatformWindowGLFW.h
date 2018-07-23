@@ -7,7 +7,38 @@
 #include "../ImWindow/ImwConfig.h"
 #include "../ImWindow/ImwPlatformWindow.h"
 
-#include "GLFW/glfw3.h"
+
+#ifdef USE_GLES3
+	
+	#define GL_GLEXT_PROTOTYPES
+	// OpenGL ES includes
+	#include <GLES3/gl3.h>
+	//#include <GLES3/gl3ext.h>
+
+	// EGL includes
+	#include <EGL/egl.h>
+	#include <EGL/eglext.h>
+	#include <EGL/eglplatform.h>
+	#define GLFW_INCLUDE_NONE
+
+	//#include "../imgui.h"
+	//#include "imgui_impl_glfw.h"
+
+	// GLFW
+	#include <GLFW/glfw3.h>
+
+	#ifdef _WIN32
+		#undef APIENTRY
+		#define GLFW_EXPOSE_NATIVE_WIN32
+		#include <GLFW/glfw3native.h>   // for glfwGetWin32Window
+	#endif
+#else
+	#include "GLFW/glfw3.h"
+#endif
+
+
+
+
 
 IMGUI_API ImTextureID ImGui_Impl_CreateImageRGBA8888(uint8_t const * pixels, int32_t width, int32_t height);
 IMGUI_API void        ImGui_Impl_DeleteImage(ImTextureID img);
@@ -38,7 +69,7 @@ namespace ImWindow
 
 	protected:
 		virtual void						PreUpdate();
-		virtual void						RenderDrawLists(ImDrawData* pDrawData);
+		virtual void						RenderDrawLists(ImDrawData* draw_data);
 		virtual void                        UpdateTime();
 
 		static void							OnClose(GLFWwindow* pWindow);

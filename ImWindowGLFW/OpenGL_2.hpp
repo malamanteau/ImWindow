@@ -1,5 +1,16 @@
 #pragma once
 
+#pragma comment(lib, "opengl32.lib")
+
+static Handy::ThreadPool * g_pool = nullptr;
+
+void GLVersionWindowHint()
+{
+	glfwWindowHint(GLFW_CONTEXT_VERSION_MAJOR, 2);
+	glfwWindowHint(GLFW_CONTEXT_VERSION_MINOR, 1);
+
+}
+
 ImTextureID ImGui_Impl_CreateImageRGBA8888(uint8_t const * pixels, int32_t width, int32_t height)
 {
 	if (!g_pool)
@@ -63,10 +74,13 @@ void ImGui_Impl_DeleteImage(ImTextureID img)
 	//g_pool->WaitAll();
 }
 
-void GLVersionWindowHint()
+void ImGui_Impl_CreateDeviceObjects()
 {
-	glfwWindowHint(GLFW_CONTEXT_VERSION_MAJOR, 2);
-	glfwWindowHint(GLFW_CONTEXT_VERSION_MINOR, 1);
+
+}
+
+void ImGui_Impl_DestroyDeviceObjects()
+{
 
 }
 

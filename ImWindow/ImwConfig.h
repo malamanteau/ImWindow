@@ -53,8 +53,12 @@
 //////////////////////////////////////////////////////////////////////////
 #include "../../HandyCpp/Handy.hpp"
 
-#include "../../imgui/imgui.h"
-#include "../../imgui/imgui_internal.h"
+#ifdef USE_VECTORIAL
+	#include "../../VectorialPlusPlus/include/Vectorial.hpp"
+#endif
+
+#include "imgui.h"
+#include "imgui_internal.h"
 
 struct Globals
 {

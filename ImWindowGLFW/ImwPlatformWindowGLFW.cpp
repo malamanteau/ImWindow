@@ -25,11 +25,11 @@ static GLFWwindow * offscreen_context = nullptr;
 
 static std::mutex ImGui_Impl_Mutex;
 
-static Handy::ThreadPool * g_pool = nullptr;
-
-#include "OpenGL2.hpp"
-
-
+#ifdef USE_GLES3
+	#include "OpenGL_ES3.hpp"
+#else
+	#include "OpenGL_2.hpp"
+#endif
 
 ImwPlatformWindowGLFW::ImwPlatformWindowGLFW(EPlatformWindowType eType, bool bCreateState)
 	: ImwPlatformWindow(eType, bCreateState)
@@ -65,11 +65,11 @@ ImwPlatformWindowGLFW::~ImwPlatformWindowGLFW()
 	{
 		if (m_iTextureID != 0)
 		{
-			GLuint dt = (GLuint)(uintptr_t)m_iTextureID;
-
-			glDeleteTextures(1, &dt);
+			ImGui_Impl_DeleteImage(m_iTextureID);
 			m_iTextureID = 0;
 		}
+
+		ImGui_Impl_DestroyDeviceObjects();
 	}
 
 	if (m_pWindow != NULL)
@@ -178,7 +178,7 @@ bool ImwPlatformWindowGLFW::Init(ImwPlatformWindow* pMain)
 		}
 		catch (...)
 		{
-			std::cerr << "Could not decode icon image from file: " << "internal/glfwicon.ico" << std::endl;
+			std::cerr << "Could not decode icon image from file: " << "Internal/glfwicon.ico" << std::endl;
 		}
 
 		if (rgba)
@@ -221,33 +221,21 @@ bool ImwPlatformWindowGLFW::Init(ImwPlatformWindow* pMain)
 		int32_t iWidth;
 		int32_t iHeight;
 		auto * defFnt = io.Fonts->AddFontDefault();
-		//auto * prettyFnt = io.Fonts->AddFontFromFileTTF("../../../imgui/misc/fonts/Roboto-Regular.ttf", 16);
 
-		//#ifdef USE_FREETYPE
 		unsigned int flags = ImGuiFreeType::ForceAutoHint; //ImGuiFreeType::LightHinting;
 		ImGuiFreeType::BuildFontAtlas( io.Fonts, flags );
-		//#endif
 
 		//io.Fonts->GetTexDataAsAlpha8(&pPixels, &iWidth, &iHeight);
 		io.Fonts->GetTexDataAsRGBA32(&pPixels, &iWidth, &iHeight);
 
 		m_iTextureID = ImGui_Impl_CreateImageRGBA8888(pPixels, iWidth, iHeight);
 
-		//// Upload texture to graphics system
-		//glEnable(GL_TEXTURE_2D);
-		//m_iTextureID = 0;
-		//glGenTextures(1, &m_iTextureID);
-		//glBindTexture(GL_TEXTURE_2D, m_iTextureID);
-		//glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
-		//glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
-		//glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA8, iWidth, iHeight, 0, GL_RGBA, GL_UNSIGNED_BYTE, pPixels);
-
-
 		// Store our identifier
 		io.Fonts->TexID = (void *)(intptr_t)m_iTextureID;
 
 		ImGui::SetCurrentFont(defFnt);
-		//ImGui::SetCurrentFont(prettyFnt);
+		
+		ImGui_Impl_CreateDeviceObjects();
 	}
 	
 	io.KeyMap[ImGuiKey_Tab] = GLFW_KEY_TAB;
@@ -350,9 +338,9 @@ void ImwPlatformWindowGLFW::PreUpdate()
 	glfwPollEvents();
 
 	ImGuiIO& oIO = m_pContext->IO;
-	oIO.KeyCtrl = 0 != (m_iLastMods & GLFW_MOD_CONTROL);
+	oIO.KeyCtrl  = 0 != (m_iLastMods & GLFW_MOD_CONTROL);
 	oIO.KeyShift = 0 != (m_iLastMods & GLFW_MOD_SHIFT);
-	oIO.KeyAlt = 0 != (m_iLastMods & GLFW_MOD_ALT);
+	oIO.KeyAlt   = 0 != (m_iLastMods & GLFW_MOD_ALT);
 	oIO.KeySuper = 0 != (m_iLastMods & GLFW_MOD_SUPER);
 
 	if (oIO.MouseDrawCursor)
