@@ -3,6 +3,7 @@
 #define __IM_PLATFORM_WINDOW_GLFW_H__
 
 #include <mutex>
+#include <string>
 
 #include "../ImWindow/ImwConfig.h"
 #include "../ImWindow/ImwPlatformWindow.h"
@@ -50,6 +51,7 @@ namespace ImWindow
 		friend class ImwWindowManagerGLFW;
 
 	public:
+		static std::string GLFWProgramWindowName;
 											ImwPlatformWindowGLFW(EPlatformWindowType eType, bool bCreateState);
 		virtual								~ImwPlatformWindowGLFW();
 

@@ -31,6 +31,8 @@ static std::mutex ImGui_Impl_Mutex;
 	#include "OpenGL_2.hpp"
 #endif
 
+std::string ImwPlatformWindowGLFW::GLFWProgramWindowName = std::string("Main Window GLFW");
+
 ImwPlatformWindowGLFW::ImwPlatformWindowGLFW(EPlatformWindowType eType, bool bCreateState)
 	: ImwPlatformWindow(eType, bCreateState)
 	, m_pWindow( NULL )
@@ -124,7 +126,7 @@ bool ImwPlatformWindowGLFW::Init(ImwPlatformWindow* pMain)
 
 
 	fprintf(stderr, "Calling glfwCreateWindow() to create main platform window...\r\n"); fflush(stderr);
-	m_pWindow = glfwCreateWindow(1024, 768, "Main Window GLFW", NULL, pMainWindow ? pMainWindow : offscreen_context);
+	m_pWindow = glfwCreateWindow(1024, 768, GLFWProgramWindowName.c_str(), NULL, pMainWindow ? pMainWindow : offscreen_context);
 	
 	if (!m_pWindow)
 	{
